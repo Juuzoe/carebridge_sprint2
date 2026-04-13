@@ -2,10 +2,11 @@ import os
 
 from flask import Flask, flash, redirect, render_template, session, url_for
 
-from extensions import db
+from extensions import db. mail
 from forms import ConfirmDoseForm
 from core import add_log, already_logged_today, clear_logs, load_logs
 from models import Schedule, seed_schedules
+from mailer import send_email
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret-key"
@@ -16,6 +17,14 @@ os.makedirs(instance_dir, exist_ok=True)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(instance_dir, "carebridge.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+app.config["MAIL_SERVER"] = "127.0.0.1"
+app.config["MAIL_PORT"] = 8025
+app.config["MAIL_USE_TLS"] = False
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_DEFAULT_SENDER"] = "noreply@carebridge.com"
+app.config["GP_EMAIL"] = "gp@carebridge.bot"
+
+mail.init_app(app)
 db.init_app(app)
 
 
@@ -70,7 +79,37 @@ def reminder(schedule_id: int):
             flash("Already logged for today (for this user).")
             return redirect(url_for("history"))
 
-        add_log(schedule_id, username, status)
+        entry = add_log(schedule_id, username, status)
+
+        if status in ("skipped", "remind_later"):
+            try:
+                send_email(
+                    subject="CareBridge Alert: Missed or Late Medication",
+                    sender=app.config["MAIL_DEFAULT_SENDER"],
+                    recipients=[app.config["GP_EMAIL"]],
+                    text_body=render_template(
+                        "email/gp_alert.txt",
+                        username=entry.username,
+                        med_name=entry.schedule.med_name,
+                        dosage=entry.schedule.dosage,
+                        time_of_day=entry.schedule.time_of_day,
+                        status=entry.status,
+                        when_logged=entry.when.strftime("%Y-%m-%d %H:%M:%S"),
+                    ),
+                    html_body=render_template(
+                        "email/gp_alert.html",
+                        username=entry.username,
+                        med_name=entry.schedule.med_name,
+                        dosage=entry.schedule.dosage,
+                        time_of_day=entry.schedule.time_of_day,
+                        status=entry.status,
+                        when_logged=entry.when.strftime("%Y-%m-%d %H:%M:%S"),
+                    ),
+                )
+                flash("GP notification email generated.")
+            except Exception as e:
+                flash(f"Log saved, but GP email could not be generated: {e}")
+
 
         if status == "taken":
             flash("Recorded: Taken.")

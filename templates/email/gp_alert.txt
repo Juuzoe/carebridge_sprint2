@@ -1,0 +1,10 @@
+CareBridge GP Alert
+
+Patient: {{ username }}
+Medication: {{ med_name }}
+Dosage: {{ dosage }}
+Scheduled time: {{ time_of_day }}
+Status: {{ status }}
+Logged at: {{ when_logged }}
+
+This alert was generated because the medication was either skipped or late.

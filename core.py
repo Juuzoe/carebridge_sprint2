@@ -39,6 +39,7 @@ def add_log(schedule_id: int, username: str, status: str) -> None:
     )
     db.session.add(entry)
     db.session.commit()
+    return entry
 
 
 def clear_logs() -> None:
