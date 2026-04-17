@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Weekly Medication Summary</h1>
+
+<ul>
+    <li>Total doses: {{ summary.total }}</li>
+    <li>Taken: {{ summary.taken }}</li>
+    <li>Missed: {{ summary.missed }}</li>
+    <li>Escalations: {{ summary.escalations }}</li>
+</ul>
+
+<p><strong>Adherence: {{ summary.adherence }}%</strong></p>
+
+<hr>
+
+<form action="{{ url_for('share_report') }}" method="get">
+    <button type="submit">Download Report (.txt)</button>
+</form>
+
+{% endblock %}
