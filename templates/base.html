@@ -2,88 +2,401 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CareBridge Sprint 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "CareBridge" }}</title>
   <style>
+    :root {
+      --bg: #f4f1ea;
+      --panel: #fffdf8;
+      --panel-strong: #ffffff;
+      --line: #d8cfbf;
+      --text: #1f2b2e;
+      --muted: #5f6b6e;
+      --primary: #1f6c5b;
+      --primary-strong: #11473c;
+      --accent: #c96c3d;
+      --danger: #a63f3f;
+      --warning: #ac7b17;
+      --shadow: 0 16px 40px rgba(37, 45, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(201, 108, 61, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(31, 108, 91, 0.12), transparent 26%),
+        linear-gradient(180deg, #f8f4ed 0%, #f0ece4 100%);
+      min-height: 100vh;
     }
 
-    .flash-box {
-      background: #f4f4f4;
-      border: 1px solid #ccc;
-      padding: 12px;
-      margin-bottom: 20px;
-      border-radius: 8px;
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
     }
 
-    .notification-popup {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 320px;
-      background: #fff4f4;
-      border: 2px solid #d9534f;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
-    .notification-popup h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      color: #b02a37;
+    .brand h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 0.02em;
     }
 
-    .notification-popup p {
-      margin-bottom: 12px;
+    .brand p {
+      margin: 6px 0 0;
+      color: var(--muted);
     }
 
-    .notification-popup a {
-      display: inline-block;
-      padding: 8px 14px;
-      background: #d9534f;
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav a, .nav button, .button {
+      border: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--text);
+      padding: 10px 16px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      font: inherit;
+    }
+
+    .button-primary {
+      background: var(--primary);
       color: white;
-      text-decoration: none;
-      border-radius: 6px;
+      border-color: var(--primary);
     }
 
-    .page-content {
-      margin-top: 20px;
+    .button-accent {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .button-danger {
+      background: white;
+      color: var(--danger);
+      border-color: rgba(166, 63, 63, 0.35);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(255, 253, 248, 0.92);
+      border: 1px solid rgba(216, 207, 191, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(6px);
+    }
+
+    .card h2, .card h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .flash-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .flash {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(31, 108, 91, 0.1);
+      border: 1px solid rgba(31, 108, 91, 0.18);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(216, 207, 191, 0.8);
+      vertical-align: top;
+    }
+
+    th {
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    form.inline { display: inline; }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font: inherit;
+    }
+
+    .field.checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 18px;
+    }
+
+    .notification-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .notification-item {
+      border: 1px solid rgba(216, 207, 191, 0.85);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.84);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      background: rgba(31, 108, 91, 0.12);
+      color: var(--primary-strong);
+    }
+
+    .badge.warning {
+      background: rgba(172, 123, 23, 0.14);
+      color: var(--warning);
+    }
+
+    .badge.danger {
+      background: rgba(166, 63, 63, 0.12);
+      color: var(--danger);
+    }
+
+    .empty {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .modal-shell {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 23, 25, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .modal-shell.open { display: flex; }
+
+    .modal {
+      width: min(560px, 100%);
+      background: var(--panel-strong);
+      border-radius: 24px;
+      box-shadow: 0 24px 70px rgba(12, 20, 25, 0.24);
+      padding: 26px;
+      border: 1px solid rgba(216, 207, 191, 0.85);
+    }
+
+    .modal p { margin-top: 0; }
+
+    .modal .actions { margin-top: 18px; }
+
+    @media (max-width: 860px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>CareBridge Sprint 1</h1>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <h1>CareBridge</h1>
+        <p>Medication reminders, escalation prompts, and adherence history.</p>
+      </div>
+      <div class="nav">
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('create_medication') }}">New Schedule</a>
+          <a href="{{ url_for('history') }}">History</a>
+          <a href="{{ url_for('weekly_summary_view') }}">Weekly Summary</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Sign In</a>
+          <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+      </div>
+    </div>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="flash-box">
-        <p><strong>Messages:</strong></p>
-        <ul>
-          {% for m in messages %}
-            <li>{{ m }}</li>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-list">
+          {% for message in messages %}
+            <li class="flash">{{ message }}</li>
           {% endfor %}
         </ul>
-      </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if status_banners %}
+      <ul class="flash-list">
+        {% for item in status_banners %}
+          <li class="flash">
+            <strong>Your response has been recorded.</strong>
+            {{ item.message }}
+          </li>
+        {% endfor %}
+      </ul>
     {% endif %}
-  {% endwith %}
 
-  {% if current_user.is_authenticated and active_notifications is defined and active_notifications %}
-    {% for notification in active_notifications %}
-      <div class="notification-popup">
-        <h3>Medication Reminder</h3>
-        <p>{{ notification.message }}</p>
-        <a href="{{ url_for('open_notification', notification_id=notification.id) }}">Open reminder</a>
-      </div>
-    {% endfor %}
-  {% endif %}
-
-  <hr>
-
-  <div class="page-content">
     {% block content %}{% endblock %}
   </div>
+
+  {% if current_user.is_authenticated %}
+    <div id="reminder-modal-shell" class="modal-shell">
+      <div class="modal">
+        <span class="badge">Reminder</span>
+        <h2 id="reminder-modal-title">Medication reminder</h2>
+        <p id="reminder-modal-text"></p>
+        <div id="reminder-modal-snooze" class="actions" style="display:none;">
+          <form id="later-30-form" method="post"><input type="hidden" name="minutes" value="30"><button class="button" type="submit">30 minutes</button></form>
+          <form id="later-60-form" method="post"><input type="hidden" name="minutes" value="60"><button class="button" type="submit">1 hour</button></form>
+          <form id="later-120-form" method="post"><input type="hidden" name="minutes" value="120"><button class="button" type="submit">2 hours</button></form>
+        </div>
+        <div class="actions">
+          <form id="taken-form" method="post">
+            <button class="button button-primary" type="submit">Taken</button>
+          </form>
+          <button id="show-later-options" class="button button-accent" type="button">Remind me later</button>
+          <button id="close-reminder-modal" class="button" type="button">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const modalShell = document.getElementById("reminder-modal-shell");
+        const modalTitle = document.getElementById("reminder-modal-title");
+        const modalText = document.getElementById("reminder-modal-text");
+        const snoozeBlock = document.getElementById("reminder-modal-snooze");
+        const showLaterButton = document.getElementById("show-later-options");
+        const closeButton = document.getElementById("close-reminder-modal");
+        const takenForm = document.getElementById("taken-form");
+        const later30Form = document.getElementById("later-30-form");
+        const later60Form = document.getElementById("later-60-form");
+        const later120Form = document.getElementById("later-120-form");
+        let currentReminderId = null;
+
+        async function pollReminders() {
+          const response = await fetch("{{ url_for('reminder_poll') }}", { headers: { "X-Requested-With": "XMLHttpRequest" } });
+          if (!response.ok) return;
+          const data = await response.json();
+          const reminders = data.reminders || [];
+          if (!reminders.length) {
+            if (currentReminderId === null) {
+              modalShell.classList.remove("open");
+            }
+            return;
+          }
+
+          const reminder = reminders[0];
+          if (currentReminderId === reminder.id && modalShell.classList.contains("open")) {
+            return;
+          }
+
+          currentReminderId = reminder.id;
+          modalTitle.textContent = `${reminder.med_name} reminder`;
+          modalText.textContent = `${reminder.dosage} is due at ${reminder.due_at}.`;
+          takenForm.action = reminder.taken_url;
+          later30Form.action = reminder.remind_later_url;
+          later60Form.action = reminder.remind_later_url;
+          later120Form.action = reminder.remind_later_url;
+          showLaterButton.style.display = reminder.allow_remind_later ? "inline-flex" : "none";
+          snoozeBlock.style.display = "none";
+          modalShell.classList.add("open");
+
+          if ("Notification" in window) {
+            if (Notification.permission === "default") {
+              Notification.requestPermission();
+            } else if (Notification.permission === "granted") {
+              new Notification("CareBridge reminder", { body: `${reminder.med_name} is due now.` });
+            }
+          }
+        }
+
+        showLaterButton.addEventListener("click", () => {
+          snoozeBlock.style.display = "flex";
+        });
+
+        closeButton.addEventListener("click", () => {
+          modalShell.classList.remove("open");
+          currentReminderId = null;
+        });
+
+        pollReminders();
+        window.setInterval(pollReminders, 30000);
+      })();
+    </script>
+  {% endif %}
 </body>
 </html>
