@@ -1,4 +1,4 @@
-import os
+
 from datetime import date, datetime, timedelta
 
 from extensions import db
