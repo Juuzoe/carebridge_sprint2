@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Remind Me Later</h2>
+
+<p>Select when you would like to be reminded again for:</p>
+
+<p><strong>{{ event.schedule.med_name }}</strong></p>
+<p>Dosage: {{ event.schedule.dosage }}</p>
+
+<form method="post">
+  <p>
+    <button type="submit" name="delay_minutes" value="30">In 30 minutes</button>
+  </p>
+  <p>
+    <button type="submit" name="delay_minutes" value="60">In 1 hour</button>
+  </p>
+  <p>
+    <button type="submit" name="delay_minutes" value="120">In 2 hours</button>
+  </p>
+</form>
+
+<p><a href="{{ url_for('home') }}">Back</a></p>
+
+{% endblock %}
