@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Carer Portal</h2>
+  <p class="muted">Enter the access code shared by the patient.</p>
+
+  <form method="post">
+    <div class="field">
+      <label for="carer_code">Carer access code</label>
+      <input id="carer_code" name="carer_code" type="text" required>
+    </div>
+
+    <div class="actions">
+      <button type="submit">View status</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
