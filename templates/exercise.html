@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Exercise</h2>
+  <p class="muted">Use this page to log a simple daily exercise task.</p>
+
+  <div class="actions">
+    <form class="inline" method="post" action="{{ url_for('exercise_complete') }}">
+      <button type="submit">Mark today's exercise complete</button>
+    </form>
+    <a class="secondary" href="{{ url_for('home') }}">Back</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Weekly Exercise Summary</h2>
+  <table>
+    <tbody>
+      <tr>
+        <th>Completed exercise days</th>
+        <td>{{ summary.completed_days }}</td>
+      </tr>
+      <tr>
+        <th>Period</th>
+        <td>{{ summary.period_start }} to {{ summary.period_end }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Exercise History</h2>
+
+  {% if logs %}
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Completed at</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+          <tr>
+            <td>{{ log.exercise_date }}</td>
+            <td>{{ log.completed_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No exercise has been logged yet.</div>
+  {% endif %}
+</div>
+
+{% endblock %}
