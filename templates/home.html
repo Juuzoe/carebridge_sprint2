@@ -1,16 +1,137 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p><a href="{{ url_for('history') }}">View history</a></p>
+<div class="card">
+  <h2>Welcome, {{ current_user.username }}</h2>
+  <p class="muted">Current time: {{ now }}</p>
+  <p class="muted">Reminder email: {{ current_user.email }}</p>
+  {% if current_user.carer_email %}
+    <p class="muted">Carer alert email: {{ current_user.carer_email }}</p>
+  {% endif %}
 
-<h2>Schedules</h2>
-<ul>
-  {% for sid, s in schedules.items() %}
-    <li>
-      <strong>{{ s.med_name }}</strong> — {{ s.dosage }} ({{ s.time_of_day }})
-      — <a href="{{ url_for('reminder', schedule_id=sid) }}">Open reminder</a>
-    </li>
-  {% endfor %}
-</ul>
+  <div class="actions">
+    <a href="{{ url_for('create_medication') }}">Add medication</a>
+    <a class="secondary" href="{{ url_for('exercise') }}">Log exercise</a>
+    <a class="secondary" href="{{ url_for('carer_status') }}">View carer status</a>
+    <a class="secondary" href="{{ url_for('account_settings') }}">Update contact details</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Today's Medication Status</h2>
+
+  {% if daily_status %}
+    <table>
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dosage</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in daily_status %}
+          <tr>
+            <td>{{ item.med_name }}</td>
+            <td>{{ item.dosage }}</td>
+            <td>{{ item.time }}</td>
+            <td>{{ item.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No medication schedules have been added yet.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Schedules</h2>
+
+  {% if schedules %}
+    <table>
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dosage</th>
+          <th>Time</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for schedule in schedules %}
+          <tr>
+            <td>{{ schedule.med_name }}</td>
+            <td>{{ schedule.dosage }}</td>
+            <td>{{ schedule.scheduled_time.strftime("%H:%M") }}</td>
+            <td>{{ "Yes" if schedule.active else "No" }}</td>
+            <td>
+              <div class="actions">
+                <a class="secondary" href="{{ url_for('reminder', schedule_id=schedule.id) }}">Open reminder</a>
+                <a class="secondary" href="{{ url_for('edit_medication', schedule_id=schedule.id) }}">Edit</a>
+                <form class="inline" method="post" action="{{ url_for('delete_medication', schedule_id=schedule.id) }}">
+                  <button class="danger" type="submit" onclick="return confirm('Delete this medication schedule?');">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No medication schedules have been added yet.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Reminders Due Now</h2>
+
+  {% if reminders %}
+    <table>
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dosage</th>
+          <th>Due at</th>
+          <th>Stage</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for reminder in reminders %}
+          <tr>
+            <td>{{ reminder.schedule.med_name }}</td>
+            <td>{{ reminder.schedule.dosage }}</td>
+            <td>{{ reminder.due_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+            <td>{{ reminder.stage }}</td>
+            <td><a href="{{ url_for('reminder_detail', reminder_id=reminder.id) }}">Open reminder</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No reminders are due right now.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Recent Notifications</h2>
+
+  {% if notifications %}
+    <ul>
+      {% for notification in notifications %}
+        <li>
+          <strong>{{ notification.channel.replace("_", " ") }}:</strong>
+          {{ notification.message }}
+          <span class="muted">({{ notification.created_at.strftime("%Y-%m-%d %H:%M:%S") }})</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">No notifications yet.</div>
+  {% endif %}
+</div>
 
 {% endblock %}
