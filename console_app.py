@@ -1,56 +1,89 @@
 from app import app
-from core import format_datetime, get_user_logs, local_now, run_reminder_engine
-from models import MedicationSchedule, User
+from core import add_log, already_logged_today, clear_logs, load_logs
+from models import Schedule
 
 
-def print_schedules(user):
+def print_schedules():
     print("\nMedication schedules:")
-
-    schedules = MedicationSchedule.query.filter_by(user_id=user.id).order_by(
-        MedicationSchedule.scheduled_time.asc()
-    ).all()
-
-    if not schedules:
-        print("No medications have been added yet.")
-        return
-
-    for schedule in schedules:
-        time_text = schedule.scheduled_time.strftime("%H:%M")
-        print(f"{schedule.id}) {schedule.med_name} - {schedule.dosage} at {time_text}")
+    for s in Schedule.query.order_by(Schedule.id).all():
+        print(f"  {s.id}) {s.med_name} — {s.dosage} ({s.time_of_day})")
 
 
-def print_history(user):
-    print("\nLatest history:")
-    logs = get_user_logs(user.id)
-
+def print_logs(logs):
     if not logs:
-        print("No history yet.")
+        print("\nNo actions yet.")
         return
+    print("\nHistory (newest first):")
+    for item in logs[:30]:
+        print(f"- {item['when']} | {item['username']} | {item['med_name']} | {item['status']}")
 
-    for log in logs[:10]:
-        print(f"{log['logged_at']} | {log['med_name']} | {log['status']} | scheduled {log['scheduled_for']}")
+
+def pick_schedule_id():
+    try:
+        return int(input("Enter schedule id: ").strip())
+    except ValueError:
+        return None
 
 
 def main():
-    username = input("Enter your username: ").strip()
-
+    username = input("Enter your name: ").strip()
     if not username:
-        print("Username is required.")
+        print("Name is required.")
         return
 
     with app.app_context():
-        user = User.query.filter_by(username=username).first()
+        while True:
+            print("\nCareBridge (Console)")
+            print("1) View schedules")
+            print("2) Log TAKEN")
+            print("3) Log SKIPPED")
+            print("4) Remind me later")
+            print("5) View history")
+            print("6) Clear history")
+            print("0) Exit")
 
-        if user is None:
-            print("User not found.")
-            return
+            choice = input("Choose: ").strip()
+            logs = load_logs()
 
-        run_reminder_engine()
-        print(f"CareBridge console summary at {format_datetime(local_now())}")
-        print_schedules(user)
-        print_history(user)
+            if choice == "1":
+                print_schedules()
+
+            elif choice in ("2", "3", "4"):
+                print_schedules()
+                sid = pick_schedule_id()
+                if sid is None or Schedule.query.get(sid) is None:
+                    print("Invalid schedule id.")
+                    continue
+
+                if already_logged_today(sid, username):
+                    print("Already logged for today (for this user).")
+                    continue
+
+                if choice == "2":
+                    status = "taken"
+                elif choice == "3":
+                    status = "skipped"
+                else:
+                    status = "remind_later"
+
+                add_log(sid, username, status)
+                print(f"Recorded: {status}")
+
+            elif choice == "5":
+                print_logs(logs)
+
+            elif choice == "6":
+                clear_logs()
+                print("History cleared.")
+
+            elif choice == "0":
+                break
+
+            else:
+                print("Unknown option.")
 
 
 if __name__ == "__main__":
     main()
+
 
