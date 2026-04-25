@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Carer Status</h2>
+  <p class="muted">This page lets the patient preview the read-only carer view.</p>
+</div>
+
+<div class="card">
+  <h2>Today's Medication Status</h2>
+
+  {% if daily_status %}
+    <table>
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dosage</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in daily_status %}
+          <tr>
+            <td>{{ item.med_name }}</td>
+            <td>{{ item.dosage }}</td>
+            <td>{{ item.time }}</td>
+            <td>{{ item.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No medication schedules have been added yet.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Weekly Summary</h2>
+  <table>
+    <tbody>
+      <tr>
+        <th>Total doses</th>
+        <td>{{ medication_summary.total }}</td>
+      </tr>
+      <tr>
+        <th>Taken</th>
+        <td>{{ medication_summary.taken }}</td>
+      </tr>
+      <tr>
+        <th>Missed</th>
+        <td>{{ medication_summary.missed }}</td>
+      </tr>
+      <tr>
+        <th>Adherence</th>
+        <td>{{ medication_summary.adherence }}%</td>
+      </tr>
+      <tr>
+        <th>Exercise days</th>
+        <td>{{ exercise_summary.completed_days }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
