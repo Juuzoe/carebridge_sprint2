@@ -1,0 +1,6 @@
+CareBridge medication reminder
+{{ message }}
+Medication: {{ reminder.schedule.med_name }}
+Dosage: {{ reminder.schedule.dosage }}
+Reminder stage: {{ reminder.stage }}
+Reminder due: {{ reminder.due_at.strftime("%Y-%m-%d %H:%M:%S") }}
