@@ -26,7 +26,7 @@ from core import (
 from extensions import db, mail
 from forms import AccountSettingsForm, ConfirmDoseForm, LoginForm, MedicationForm, RegistrationForm
 from mailer import send_gp_summary
-from models import Schedule, User, seed_schedules
+from models import Schedule, User
 
 
 app = Flask(__name__)
@@ -155,8 +155,6 @@ def register():
         )
         user.set_password(form.password.data)
         db.session.add(user)
-        db.session.commit()
-        seed_schedules(user.id)
         db.session.commit()
         flash("Registration complete. You can sign in now.")
         return redirect(url_for("login"))
@@ -494,4 +492,3 @@ def email_gp_report():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
