@@ -1,25 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Reminder</h2>
+<div class="card">
+  <h2>Reminder</h2>
 
-<p><strong>{{ sched.med_name }}</strong></p>
-<p>Dosage: {{ sched.dosage }}</p>
-<p>Time of day: {{ sched.time_of_day }}</p>
+  <p><strong>{{ reminder.schedule.med_name }}</strong></p>
+  <p>Dosage: {{ reminder.schedule.dosage }}</p>
+  <p>Original time: {{ reminder.original_due_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+  <p>Reminder due: {{ reminder.due_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+  <p>Reminder stage: {{ reminder.stage }}</p>
 
-<form method="post">
-  {{ form.hidden_tag() }}
+  <div class="actions">
+    <form class="inline" method="post" action="{{ url_for('reminder_taken', reminder_id=reminder.id) }}">
+      <button type="submit">Taken</button>
+    </form>
 
-  <p>
-    {{ form.username.label }}<br>
-    {{ form.username(size=30) }}
-  </p>
+    {% if reminder.email_sent_at %}
+      <form class="inline" method="post" action="{{ url_for('reminder_skipped', reminder_id=reminder.id) }}">
+        <button class="danger" type="submit">Skipped</button>
+      </form>
+    {% endif %}
 
-  <p>{{ form.taken() }}</p>
-  <p>{{ form.skipped() }}</p>
-  <p>{{ form.remind_later() }}</p>
-</form>
+    {% if reminder.stage == "initial" %}
+      <form class="inline" method="post" action="{{ url_for('reminder_later', reminder_id=reminder.id) }}">
+        <input type="hidden" name="minutes" value="30">
+        <button class="secondary" type="submit">Remind me in 30 minutes</button>
+      </form>
 
-<p><a href="{{ url_for('home') }}">Back</a></p>
+      <form class="inline" method="post" action="{{ url_for('reminder_later', reminder_id=reminder.id) }}">
+        <input type="hidden" name="minutes" value="60">
+        <button class="secondary" type="submit">Remind me in 1 hour</button>
+      </form>
+
+      <form class="inline" method="post" action="{{ url_for('reminder_later', reminder_id=reminder.id) }}">
+        <input type="hidden" name="minutes" value="120">
+        <button class="secondary" type="submit">Remind me in 2 hours</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <p><a href="{{ url_for('home') }}">Back</a></p>
+</div>
 
 {% endblock %}

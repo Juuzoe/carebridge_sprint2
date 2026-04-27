@@ -1,0 +1,11 @@
+CareBridge missed medication alert
+
+{{ reminder.user.username }} has missed two medication doses in a row.
+
+Most recent medication: {{ reminder.schedule.med_name }}
+Dosage: {{ reminder.schedule.dosage }}
+Original time: {{ reminder.original_due_at.strftime("%Y-%m-%d %H:%M:%S") }}
+Logged at: {{ dose_log.logged_at.strftime("%Y-%m-%d %H:%M:%S") }}
+Status: {{ dose_log.status }}
+
+This message was sent because the reminder was not answered in time.

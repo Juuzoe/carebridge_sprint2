@@ -1,0 +1,38 @@
+<h2>CareBridge weekly medication summary</h2>
+
+<p><strong>Patient:</strong> {{ user.username }}</p>
+
+<table>
+  <tbody>
+    <tr>
+      <th>Period start</th>
+      <td>{{ summary.period_start }}</td>
+    </tr>
+    <tr>
+      <th>Period end</th>
+      <td>{{ summary.period_end }}</td>
+    </tr>
+    <tr>
+      <th>Total doses</th>
+      <td>{{ summary.total }}</td>
+    </tr>
+    <tr>
+      <th>Taken</th>
+      <td>{{ summary.taken }}</td>
+    </tr>
+    <tr>
+      <th>Missed</th>
+      <td>{{ summary.missed }}</td>
+    </tr>
+    <tr>
+      <th>Follow-ups or snoozes</th>
+      <td>{{ summary.escalations }}</td>
+    </tr>
+    <tr>
+      <th>Adherence</th>
+      <td>{{ summary.adherence }}%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This summary was shared by the patient from CareBridge.</p>

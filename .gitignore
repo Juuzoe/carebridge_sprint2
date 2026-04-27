@@ -2,5 +2,11 @@
 venv/
 __pycache__/
 *.pyc
+.idea/
+.DS_Store
 
-instance/
+instance/*.db
+instance/*.sqlite
+instance/*.sqlite3
+instance/__pycache__/
+!instance/.gitkeep

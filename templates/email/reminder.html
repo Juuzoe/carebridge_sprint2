@@ -1,0 +1,10 @@
+<h2>CareBridge medication reminder</h2>
+
+<p>{{ message }}</p>
+
+<ul>
+  <li><strong>Medication:</strong> {{ reminder.schedule.med_name }}</li>
+  <li><strong>Dosage:</strong> {{ reminder.schedule.dosage }}</li>
+  <li><strong>Reminder stage:</strong> {{ reminder.stage }}</li>
+  <li><strong>Reminder due:</strong> {{ reminder.due_at.strftime("%Y-%m-%d %H:%M:%S") }}</li>
+</ul>

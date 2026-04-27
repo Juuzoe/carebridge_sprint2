@@ -2,23 +2,221 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CareBridge Sprint 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or "CareBridge" }}</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #1f6c5b;
+      color: white;
+      padding: 18px 0;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    nav a {
+      color: white;
+      display: inline-block;
+      margin: 4px 12px 4px 0;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 24px 0 40px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .muted {
+      color: #666;
+    }
+
+    .flash-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+    }
+
+    .flash {
+      background: #e8f4ef;
+      border: 1px solid #b7d7cc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      padding: 9px 7px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+
+    .actions {
+      margin-top: 12px;
+    }
+
+    .actions a,
+    .actions button,
+    .button {
+      display: inline-block;
+      margin: 4px 6px 4px 0;
+      padding: 8px 12px;
+      border: 1px solid #1f6c5b;
+      border-radius: 4px;
+      background: #1f6c5b;
+      color: white;
+      text-decoration: none;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .actions .secondary,
+    .button.secondary {
+      background: white;
+      color: #1f6c5b;
+    }
+
+    .actions .danger,
+    .button.danger {
+      border-color: #a33;
+      background: #a33;
+    }
+
+    form.inline {
+      display: inline;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .field input {
+      width: 100%;
+      max-width: 420px;
+      padding: 8px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      font: inherit;
+    }
+
+    .checkbox label {
+      display: inline;
+      font-weight: normal;
+    }
+
+    .checkbox input {
+      width: auto;
+    }
+
+    .empty {
+      background: #fafafa;
+      border: 1px dashed #bbb;
+      border-radius: 6px;
+      padding: 14px;
+      color: #666;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #e8f4ef;
+      color: #1f6c5b;
+      font-weight: bold;
+    }
+
+    .status.missed {
+      background: #f7e7e7;
+      color: #a33;
+    }
+  </style>
 </head>
 <body>
-  <h1>CareBridge Sprint 1</h1>
+  <header>
+    <div class="container">
+      <h1 style="margin:0 0 6px;">CareBridge</h1>
+      <p style="margin:0 0 14px;">A simple medication reminder app.</p>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <p><strong>Messages:</strong></p>
-      <ul>
-        {% for m in messages %}
-          <li>{{ m }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+      <nav>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('create_medication') }}">Add Medication</a>
+          <a href="{{ url_for('exercise') }}">Exercise</a>
+          <a href="{{ url_for('history') }}">History</a>
+          <a href="{{ url_for('weekly_summary_view') }}">Weekly Summary</a>
+          <a href="{{ url_for('carer_status') }}">Carer Status</a>
+          <a href="{{ url_for('account_settings') }}">Account</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Sign In</a>
+          <a href="{{ url_for('register') }}">Register</a>
+          <a href="{{ url_for('carer_login') }}">Carer Portal</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
 
-  <hr>
-  {% block content %}{% endblock %}
+  <main>
+    <div class="container">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flash-list">
+            {% for message in messages %}
+              <li class="flash">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      {% if status_banners %}
+        <ul class="flash-list">
+          {% for item in status_banners %}
+            <li class="flash">{{ item.message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
 </body>
 </html>

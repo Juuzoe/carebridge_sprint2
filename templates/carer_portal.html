@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Carer Portal</h2>
+  <p class="muted">Read-only status for {{ patient.username }}.</p>
+  <p>
+    <strong>API endpoint:</strong>
+    <a href="{{ url_for('api_carer_status', carer_code=patient.carer_code) }}">
+      {{ url_for('api_carer_status', carer_code=patient.carer_code) }}
+    </a>
+  </p>
+</div>
+
+<div class="card">
+  <h2>Today's Medication Status</h2>
+
+  {% if daily_status %}
+    <table>
+      <thead>
+        <tr>
+          <th>Medication</th>
+          <th>Dosage</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in daily_status %}
+          <tr>
+            <td>{{ item.med_name }}</td>
+            <td>{{ item.dosage }}</td>
+            <td>{{ item.time }}</td>
+            <td>{{ item.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No medication schedules have been added yet.</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Weekly Medication Summary</h2>
+  <table>
+    <tbody>
+      <tr>
+        <th>Total doses</th>
+        <td>{{ medication_summary.total }}</td>
+      </tr>
+      <tr>
+        <th>Taken</th>
+        <td>{{ medication_summary.taken }}</td>
+      </tr>
+      <tr>
+        <th>Missed</th>
+        <td>{{ medication_summary.missed }}</td>
+      </tr>
+      <tr>
+        <th>Escalations</th>
+        <td>{{ medication_summary.escalations }}</td>
+      </tr>
+      <tr>
+        <th>Adherence</th>
+        <td>{{ medication_summary.adherence }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Weekly Exercise Summary</h2>
+  <table>
+    <tbody>
+      <tr>
+        <th>Completed exercise days</th>
+        <td>{{ exercise_summary.completed_days }}</td>
+      </tr>
+      <tr>
+        <th>Period</th>
+        <td>{{ exercise_summary.period_start }} to {{ exercise_summary.period_end }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Recent Notifications</h2>
+
+  {% if notifications %}
+    <ul>
+      {% for notification in notifications %}
+        <li>
+          <strong>{{ notification.channel.replace("_", " ") }}:</strong>
+          {{ notification.message }}
+          <span class="muted">({{ notification.created_at.strftime("%Y-%m-%d %H:%M:%S") }})</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty">No notifications yet.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

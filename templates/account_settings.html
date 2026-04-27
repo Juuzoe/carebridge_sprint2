@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Account Settings</h2>
+  <p class="muted">These contact details are used for reminders and reports.</p>
+
+  <p><strong>Carer access code:</strong> {{ current_user.carer_code }}</p>
+  <p class="muted">Share this code with the carer so they can view the read-only carer portal.</p>
+  <p>
+    <strong>Carer portal link:</strong>
+    <a href="{{ url_for('carer_portal', carer_code=current_user.carer_code) }}">
+      {{ url_for('carer_portal', carer_code=current_user.carer_code) }}
+    </a>
+  </p>
+  <p>
+    <strong>API status link:</strong>
+    <a href="{{ url_for('api_carer_status', carer_code=current_user.carer_code) }}">
+      {{ url_for('api_carer_status', carer_code=current_user.carer_code) }}
+    </a>
+  </p>
+
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.email.label }}
+      {{ form.email() }}
+      {% for error in form.email.errors %}
+        <p class="muted">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.carer_email.label }}
+      {{ form.carer_email() }}
+      {% for error in form.carer_email.errors %}
+        <p class="muted">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      {{ form.gp_email.label }}
+      {{ form.gp_email() }}
+      {% for error in form.gp_email.errors %}
+        <p class="muted">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="actions">
+      {{ form.submit() }}
+      <a class="secondary" href="{{ url_for('home') }}">Back</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

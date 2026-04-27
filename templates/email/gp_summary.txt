@@ -1,0 +1,13 @@
+CareBridge weekly medication summary
+
+Patient: {{ user.username }}
+
+Period start: {{ summary.period_start }}
+Period end: {{ summary.period_end }}
+Total doses: {{ summary.total }}
+Taken: {{ summary.taken }}
+Missed: {{ summary.missed }}
+Follow-ups or snoozes: {{ summary.escalations }}
+Adherence: {{ summary.adherence }}%
+
+This summary was shared by the patient from CareBridge.

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>{{ "Add Medication" if mode == "add" else "Edit Medication" }}</h2>
+
+  <form method="post" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="field">
+      {{ form.med_name.label }}
+      {{ form.med_name() }}
+    </div>
+
+    <div class="field">
+      {{ form.dosage.label }}
+      {{ form.dosage() }}
+    </div>
+
+    <div class="field">
+      {{ form.scheduled_time.label }}
+      {{ form.scheduled_time() }}
+    </div>
+
+    <div class="field checkbox">
+      <label>{{ form.active() }} {{ form.active.label.text }}</label>
+    </div>
+
+    <div class="actions">
+      {{ form.submit() }}
+      <a class="secondary" href="{{ url_for('home') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

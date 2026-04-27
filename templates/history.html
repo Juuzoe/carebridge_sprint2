@@ -1,33 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>History</h2>
+<div class="card">
+  <h2>Medication History</h2>
 
-<p>
-  <a href="{{ url_for('home') }}">Home</a> |
-  <a href="{{ url_for('clear_history') }}">Clear history</a>
-    <a href="{{ url_for('weekly_summary_view') }}">View Weekly Summary</a>
-</p>
+  <div class="actions">
+    <a class="secondary" href="{{ url_for('home') }}">Home</a>
+    <a class="secondary" href="{{ url_for('weekly_summary_view') }}">Weekly summary</a>
+    <form class="inline" method="post" action="{{ url_for('clear_history') }}">
+      <button class="danger" type="submit" onclick="return confirm('Clear all history for this user?');">Clear history</button>
+    </form>
+  </div>
 
-{% if logs %}
-  <table border="1" cellpadding="6">
-    <tr>
-      <th>Time (UTC)</th>
-      <th>User</th>
-      <th>Medication</th>
-      <th>Status</th>
-    </tr>
-    {% for item in logs %}
-      <tr>
-        <td>{{ item.when }}</td>
-        <td>{{ item.username }}</td>
-        <td>{{ item.med_name }}</td>
-        <td>{{ item.status }}</td>
-      </tr>
-    {% endfor %}
-  </table>
-{% else %}
-  <p>No actions yet.</p>
-{% endif %}
+  {% if logs %}
+    <table>
+      <thead>
+        <tr>
+          <th>Logged at</th>
+          <th>Dose date</th>
+          <th>Scheduled for</th>
+          <th>Medication</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in logs %}
+          <tr>
+            <td>{{ item.logged_at }}</td>
+            <td>{{ item.dose_date }}</td>
+            <td>{{ item.scheduled_for }}</td>
+            <td>{{ item.med_name }}</td>
+            <td>
+              <span class="status {{ 'missed' if item.status == 'missed' else '' }}">{{ item.status }}</span>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">No actions yet.</div>
+  {% endif %}
+</div>
 
 {% endblock %}
+
