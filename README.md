@@ -3,19 +3,19 @@
 A small web app for people who want help sticking to medication times, and for carers who want a simple window when they are not there in person. Older adults who forget whether they took a dose, carers who worry on work days, and (in the design) GPs who only see patients now and then.
 
 
-## features
+## Features
 
-- **Schedules** — Add medications with name, dose, and a time of day. You can edit, turn them off, or delete them.
+**Schedules** - Add medications with name, dose, and a time of day. You can edit, turn them off, or delete them.
 
-- **Reminders** — After the scheduled time, the app creates a reminder. You get notifications and an email. There is a follow-up prompt if you do not respond to the first one, and doses can end up marked missed if nothing is logged in time.
+**Reminders** - After the scheduled time, the app creates a reminder. You get notifications and an email. There is a follow-up prompt if you do not respond to the first one, and doses can end up marked missed if nothing is logged in time.
 
-- **Your answer** — On the reminder screen you can mark **Taken**, **Skipped**, or **Remind me later** (30, 60, or 120 minutes). Skipped only counts once the reminder has actually been issued.
+**Task Marking** - On the reminder screen you can mark **Taken**, **Skipped**, or **Remind me later** (30, 60, or 120 minutes). Skipped only counts once the reminder has actually been issued.
 
-- **Carer** — Each user gets a **carer code**. Someone with that code can open the carer portal without a full login and see today’s status, weekly medication and exercise summaries, and recent notices. If **two doses in a row** are missed, and a carer email is set in account settings, the app tries to email the carer.
+**Carer** - Each user gets a **carer code**. Someone with that code can open the carer portal without a full login and see today’s status, weekly medication and exercise summaries, and recent notices. If **two doses in a row** are missed, and a carer email is set in account settings, the app tries to email the carer.
 
-- **Weekly summary** — Taken vs missed counts, adherence percentage, and activity over about the last seven days. You can download a plain-text report or email a summary to a GP address if you saved one.
+**Weekly summary** - Taken vs missed counts, adherence percentage, and activity over about the last seven days. You can download a plain-text report or email a summary to a GP address if you saved one.
 
-- **Exercise** — Log that you completed today’s exercise once per day. A weekly summary counts how many days you logged in the last stretch.
+**Exercise** - Log that you completed today’s exercise once per day. A weekly summary counts how many days you logged in the last stretch.
 
 There is also a **`console_app.py`** , as per task requirements. The app does not need it but we decided to leave it here from sprint 1.
 
