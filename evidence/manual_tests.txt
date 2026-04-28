@@ -1,0 +1,142 @@
+STORY 1
+    Steps:
+    1. Added medication
+    2. Added schedule time
+    3. Saved medication as active
+    4. Returned to homepage
+
+    Expected outcome:
+    A reminder notification will appear at scheduled time
+
+    Actual result:
+    A reminder appears on the homepage under Recent Notifications section.
+    Also appears in Reminders Due Now section.
+    An email reminder is also sent and appears in the terminal.
+
+    Evidence:
+    S1_medication_reminder_success1.png
+    S1_medication_reminder_success3.png
+
+STORY 2
+test 1
+    Steps:
+    1. Opened medication reminder
+    2. Selected "Taken" button to record medication was taken
+
+    Expected outcome:
+    Message that medication was taken, and logged.
+
+    Actual outcome:
+    Medication was logged and flash messages informed that medication had been marked as "Taken".
+    Also appeared in Weekly Medication Summary.
+
+    Evidence:
+    S2_log_medication_success1.png
+    S2_medication_taken_success.png
+    S2_medication_taken_success2.png
+
+test 2
+    Steps:
+    1. Opened medication reminder
+    2. Marked as "skipped"
+
+    Expected outcome:
+    Message that medication was skipped and missed dose is logged in weekly summary.
+
+    Actual outcome:
+    Notifications sent to Recent Notification section on homepage, flash messages and
+    logged in weekly summary and day's medication status.
+
+    Evidence:
+    S2_medication_skipped_success.png
+    S2_medication_skipped_success2.png
+
+test3
+    Steps:
+    1. Opened reminder
+    2. Chose to option to remind me in 30 minutes
+    3. Returned to homepage
+
+    Expected outcome:
+    In 30 minutes (or any selected time from options) a second reminder would notify me to take medicine.
+
+    Actual outcome:
+    Notification for my option to snooze, 30 minutes after I pressed snooze,
+    I received another reminder notification and an email.
+
+    Evidence:
+    S2_medication_snoozed_success.png
+    S2_medication_snoozed_success2.png
+    S2_medication_snoozed_success3.png
+
+test4
+    Steps:
+    1. I clicked on 'Open reminder' for a medication that did not have an active reminder
+
+    Expected Outcome:
+    Nothing happens, cannot log taken/skipped twice.
+
+    Actual Outcome:
+    Reloads to homepage, preventing any duplicate logs.
+
+STORY 4
+    Steps:
+    1. Retrieved carer access code
+    2. Logged in to Carer Portal using the access code
+
+    Expected outcome:
+    The dashboard shows me today's status for my patient.
+    Whether medication has been skipped/taken/snoozed.
+
+    Actual outcome:
+    Carer portal dashboard displays Today's Medication Status, Weekly Medication Summary,
+    Weekly Exercise Summary and Recent Notifications regading the patient.
+
+    Evidence
+    S4_carer_portal_success.png
+    S4_carer_portal_success2.png
+
+STORY 5
+    Steps:
+    1. Logged in as user
+    2. Pressed exercise tab in nav bar
+    3. Marked exercise as complete via button
+
+    Expected outcome:
+    Exercise appears in weekly activity log after marking as complete
+
+    Actual outcome:
+    Exercise successfully logged.
+
+    Evidence:
+    S5_log_exercise_success.png
+
+
+STORY 6
+    Steps:
+    1. Retrieved access code for carer portal
+    2. Logged in to Carer Portal using the access code
+
+    Expected outcome:
+    The dashboard shows me a weekly summary, with total number of doses,
+    how many were taken/missed and escalation events.
+
+    Actual outcome:
+    Carer portal dashboard displays Weekly Medication Summary containing all
+    important information about patient and medication logs.
+
+    Evidence
+    S4_carer_portal_success.png
+    S4_carer_portal_success2.png
+
+STORY 6B
+    Expected outcome:
+    When I select to view weekly summary, a simplified version is displayed.
+
+    Actual outcome:
+    There is only one format to view weekly summary, it does contain a simplified
+    percentage adherence but this is within the main table.
+
+    Evidence
+    S4_carer_portal_success.png
+    S4_carer_portal_success2.png
