@@ -79,6 +79,21 @@ test4
     Actual Outcome:
     Reloads to homepage, preventing any duplicate logs.
 
+STORY 3
+    Steps:
+    1. Missed two doses when schedule reminder notification.
+
+    Expected outcome:
+    Carer receives an alert after 2 missed doses.
+
+    Actual outcome:
+    An 'email' is sent to the carer when the patient skips 2 scheduled doses.
+    Email appears in terminal
+
+    Evidence:
+    S3_carer_alert_success.png
+
+
 STORY 4
     Steps:
     1. Retrieved carer access code
@@ -90,7 +105,7 @@ STORY 4
 
     Actual outcome:
     Carer portal dashboard displays Today's Medication Status, Weekly Medication Summary,
-    Weekly Exercise Summary and Recent Notifications regading the patient.
+    Weekly Exercise Summary and Recent Notifications regarding the patient.
 
     Evidence
     S4_carer_portal_success.png
@@ -140,3 +155,20 @@ STORY 6B
     Evidence
     S4_carer_portal_success.png
     S4_carer_portal_success2.png
+
+STORY 7
+    Steps:
+    1. Enter weekly summary dashboard
+    2. Request to Email GP summary
+
+    Expected outcome:
+    An email is sent to the GP of the weekly medication summary.
+
+    Actual outcome:
+    An email is sent to the terminal to the email associated with the GP in the
+    patient's account setting.
+
+    Evidence:
+    S7_GP_summary_success.png
+    S7_GP_summary_success2.png
+
